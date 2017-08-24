@@ -18,6 +18,40 @@ html {
 
 body {
     margin: 0;
+    text-align: center;
+}
+
+.container {
+    max-width: 1000px;
+    text-align: left;
+    margin: 0 auto;
+}
+
+.work_right_detail_1 {
+    float: left;
+    width: 70%;
+}
+
+.work_right_karta {
+    float: right;
+    width: 29%;
+    padding-left: 1%;
+}
+
+.clear {
+    clear: both;
+}
+
+.detail > .clear {
+    padding-bottom: 30px;
+}
+
+.right_popis_left {
+    float: left;
+}
+
+.right_popis_right {
+    float: right;
 }
 
 /* HTML5 display definitions

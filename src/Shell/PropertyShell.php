@@ -20,6 +20,8 @@ use Cake\Http\Client\FormData;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Log\Log;
+use Cake\Mailer\Email;
+use Cake\ORM\TableRegistry;
 
 class PropertyShell extends Shell
 {
@@ -68,21 +70,47 @@ class PropertyShell extends Shell
         $data->add('ordert', 2);
 
         $http = new Client();
-        $response = $http->post('http://www.portaldrazeb.cz/index.php?p=search', (string) $data);
+        $http->post('http://www.portaldrazeb.cz/index.php?p=search', (string) $data);
 
         $response = $http->get('http://www.portaldrazeb.cz/vyhledavani');
 
         // Parsing
         $dom = HtmlDomParser::str_get_html($response->body);
-        
-        foreach ($dom->find('div[class=work_right_popis]') as $element) {
-            $nadpis = $element->children(0);
-            $title = $nadpis->text();
-            debug($title);
-            // debug($element->text());
-            // code...
-        }
 
+        $table = TableRegistry::get('Portaldrazeb');
+        
+        $drazby = [];
+        foreach ($dom->find('div[class=work_right_popis] a') as $key=>$element) {
+            $url = $element->href;
+            $currentResponse = $http->get($url);
+            $currentDom = HtmlDomParser::str_get_html($currentResponse->body);
+            $detail = $currentDom->find('div[class=right_work]', 0)->find('div[class=detail]', 0);
+
+            $drazba = '';
+            $drazba .= '<div>';
+            $drazba .= '<h2>' . ($key+1) . '</h2>';
+            $drazba .= $detail;
+            $drazba .= '</div>';
+
+            $entity = $table->newEntity();
+            $entity->html = $detail;
+            $entity->url = $url;
+
+            if ($table->save($entity)) {
+                $this->out('Drazba saved');
+            }
+
+            $drazby[] = $drazba;
+        }
+        // $email = new Email();
+        // $email
+        //     ->emailFormat('html')
+        //     ->to('ondrej.nedvidek@gmail.com')
+        //     ->from('ondra@ondra.me')
+        //     ->subject('ondra.me - drazby')
+        //     ->send(implode($drazby));
+
+        $this->out('Done');
     }
 
     /**

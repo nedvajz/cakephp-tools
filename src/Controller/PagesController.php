@@ -18,6 +18,7 @@ use Cake\Core\Configure;
 use Cake\Network\Exception\ForbiddenException;
 use Cake\Network\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
+use Cake\ORM\TableRegistry;
 
 /**
  * Static content controller
@@ -65,5 +66,13 @@ class PagesController extends AppController
             }
             throw new NotFoundException();
         }
+    }
+
+    public function drazby()
+    {
+        $table = TableRegistry::get('Portaldrazeb');
+        $data = $table->find();
+
+        $this->set(compact('data'));
     }
 }
