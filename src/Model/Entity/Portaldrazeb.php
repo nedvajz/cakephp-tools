@@ -7,8 +7,18 @@ use Cake\ORM\Entity;
  * Portaldrazeb Entity
  *
  * @property int $id
- * @property string $html
+ * @property string $jednaci_cislo
+ * @property string $url
  * @property \Cake\I18n\FrozenTime $created
+ * @property int $cena_podani
+ * @property \Cake\I18n\FrozenTime $datum_drazby
+ * @property string $misto_drazby
+ * @property string $okres
+ * @property string $adresa
+ * @property int $cena_znalec
+ * @property int $jistina
+ * @property string $jistina_kam
+ * @property string $html
  */
 class Portaldrazeb extends Entity
 {

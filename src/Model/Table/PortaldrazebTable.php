@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Rule\IsUnique;
 
 /**
  * Portaldrazeb Model
@@ -52,7 +53,51 @@ class PortaldrazebTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->scalar('html')
+            ->allowEmpty('jednaci_cislo');
+
+        $validator
+            ->scalar('url')
+            ->notEmpty('url')
+            ->add('url', [
+                'unique' => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table'
+                ]
+            ]);
+
+        $validator
+            ->integer('cena_podani')
+            ->allowEmpty('cena_podani');
+
+        $validator
+            ->dateTime('datum_drazby')
+            ->allowEmpty('datum_drazby');
+
+        $validator
+            ->scalar('misto_drazby')
+            ->allowEmpty('misto_drazby');
+
+        $validator
+            ->scalar('okres')
+            ->allowEmpty('okres');
+
+        $validator
+            ->scalar('adresa')
+            ->allowEmpty('adresa');
+
+        $validator
+            ->integer('cena_znalec')
+            ->allowEmpty('cena_znalec');
+
+        $validator
+            ->integer('jistina')
+            ->allowEmpty('jistina');
+
+        $validator
+            ->scalar('jistina_kam')
+            ->allowEmpty('jistina_kam');
+
+        $validator
             ->allowEmpty('html');
 
         return $validator;
