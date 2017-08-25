@@ -46,17 +46,6 @@ class PropertyShell extends Shell
     public function portaldrazeb()
     {
 
-        $labelsMap = [
-            'Nejnižší podání:' => 'cena_podani',
-            'Datum konání dražby:' => 'datum_drazby',
-            'Místo konání dražby:' => 'misto_drazby',
-            'Okres:' => 'okres',
-            'Adresa objektu:' => 'adresa',
-            'Cena stanovena znaleckým posudkem:' => 'cena_znalec',
-            'Dražební jistota:' => 'jistina',
-            'Způsob složení dražební jistoty' => 'jistina_kam',
-        ];
-
         // Get page
         $this->http = new Client();
         $this->searchPortaldrazeb();
@@ -123,6 +112,17 @@ class PropertyShell extends Shell
      */
     protected function parsePortaldrazeb($dom) 
     {
+        $labelsMap = [
+            'Nejnižší podání:' => 'cena_podani',
+            'Datum konání dražby:' => 'datum_drazby',
+            'Místo konání dražby:' => 'misto_drazby',
+            'Okres:' => 'okres',
+            'Adresa objektu:' => 'adresa',
+            'Cena stanovena znaleckým posudkem:' => 'cena_znalec',
+            'Dražební jistota:' => 'jistina',
+            'Způsob složení dražební jistoty' => 'jistina_kam',
+        ];
+
         $table = TableRegistry::get('Portaldrazeb');
         foreach ($dom->find('div[class=work_right_popis] a') as $key=>$element) {
             $data = [];
@@ -130,6 +130,7 @@ class PropertyShell extends Shell
             $currentResponse = $this->http->get($url);
             $currentDom = HtmlDomParser::str_get_html($currentResponse->body);
             $detail = $currentDom->find('div[class=right_work]', 0)->find('div[class=detail]', 0);
+            if (empty($detail)) continue;
 
             $jednaciCislo = $detail
                 ->find('div[class=work_right_detail_1]', 0)
@@ -206,7 +207,7 @@ class PropertyShell extends Shell
 
         // Next page
         $aktivni = $dom->find('a[class=aktivnistrana]', 0);
-        if(!empty($aktivni)) {
+        if(!empty($aktivni) && !empty($aktivni->next_sibling())) {
             $relativeUrl = $aktivni->next_sibling()->href;
             $url = "http://www.portaldrazeb.cz$relativeUrl";
 
