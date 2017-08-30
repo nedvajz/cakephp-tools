@@ -163,7 +163,9 @@ class PropertyShell extends Shell
                         $value = str_replace('.', '-', $value);
                         if ($value != 'Není stanoven') {
                             $date = DateTime::createFromFormat('d-m-Y H:i', $value);
-                            $value = date('Y-m-d H:i:s', $date->getTimestamp());
+                            if (!empty($date)) {
+                                $value = date('Y-m-d H:i:s', $date->getTimestamp());
+                            }
                         } else {
                             $value = '2099-01-01 00:00:00';
                         }

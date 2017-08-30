@@ -51,6 +51,8 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
 
+    $routes->connect('/property/*', ['controller' => 'Property', 'action' => 'index']);
+
     $routes->connect('/:action/*', ['controller' => 'Pages']);
 
     /**

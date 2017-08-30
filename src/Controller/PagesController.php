@@ -68,11 +68,4 @@ class PagesController extends AppController
         }
     }
 
-    public function drazby()
-    {
-        $table = TableRegistry::get('Portaldrazeb');
-        $data = $table->find();
-
-        $this->set(compact('data'));
-    }
 }
